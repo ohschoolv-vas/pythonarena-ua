@@ -51,6 +51,7 @@ import { MODEL_BUDGET_MS, SLOW_MARGIN, budgetProblems, quietSlowProblems, slowFi
 import { BIG_TIME_LIMIT_MS, timeLimitFor } from "../src/grader/limits.ts";
 import { pythonPool, referencePython, runKey } from "./content/python.mjs";
 import { pyodidePool, pyodideVersion } from "./content/pyodide.mjs";
+import { applyLocale } from "./i18n/merge-locales.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const CACHE_FILE = path.join(ROOT, "node_modules", ".cache", "python-arena-content.json");
@@ -235,9 +236,18 @@ const graded = (r, t) => normalizeOutput(t.call != null ? callOutput(r) : r.stdo
 // ---------------------------------------------------------------- helpers
 function readYaml(file) {
   try {
-    return YAML.parse(fs.readFileSync(file, "utf8"));
+    const original = YAML.parse(
+        fs.readFileSync(file, "utf8")
+    );
+
+    return applyLocale(file, original, {
+      root: ROOT,
+      locale: process.env.ARENA_LOCALE || "uk",
+    });
   } catch (e) {
-    errors.push(`${path.relative(ROOT, file)}: YAML error: ${e.message}`);
+    errors.push(
+        `${path.relative(ROOT, file)}: content/i18n error: ${e.message}`
+    );
     return null;
   }
 }
