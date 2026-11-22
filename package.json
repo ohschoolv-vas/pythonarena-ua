@@ -10,13 +10,14 @@
     "content": "node scripts/build-content.mjs",
     "predev": "node scripts/build-content.mjs",
     "dev": "vite",
-    "build": "node scripts/copy-engine.mjs && node scripts/build-content.mjs && tsc --noEmit && vite build && node scripts/prerender.mjs && node scripts/finish-build.mjs",
+    "build": "node scripts/i18n/check-locales.mjs && node scripts/copy-engine.mjs && node scripts/build-content.mjs && tsc --noEmit && vite build && node scripts/prerender.mjs && node scripts/finish-build.mjs",
     "preview": "vite preview",
     "content:pyodide": "node scripts/content-pyodide.mjs",
     "check-links": "node scripts/check-links.mjs",
     "test:e2e": "node scripts/e2e.mjs",
     "test:unit": "node --test \"scripts/**/*.test.mjs\"",
-    "pro-track-check": "node scripts/pro-track-check.mjs"
+    "pro-track-check": "node scripts/pro-track-check.mjs",
+    "i18n:check": "node scripts/i18n/check-locales.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
